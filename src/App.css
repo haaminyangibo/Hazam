@@ -590,3 +590,240 @@ h2 {
   border-bottom: 62px solid #1a75ff;
   transform: translateX(-50%);
 }
+
+
+.AsadContainer {
+  position:fixed !important;
+  left: 80% !important;
+  right:20% !important; 
+  top:50% !important;
+  bottom:50% !important;
+  
+
+}
+
+.AsmallsadContainer {
+  position:fixed !important;
+  left: 40% !important;
+  right:60% !important; 
+  top:50% !important;
+  bottom:50% !important;
+  max-width: 50px !important;
+  max-height: 50px!important;
+}
+
+#Asmallsadmode {
+  /* display: inline-block; */
+  background: #005ce6;
+  width: 50px;
+  height:50px;
+  border-radius: 50%;
+  position: relative;
+  left : 90% ;
+  right: 20%;
+  color:#0F0;
+}
+#Asmallsadmode::before {
+  content: "";
+  position: absolute;
+  top: -81%;
+  left: 50%;
+  border: 42px solid transparent;
+  border-bottom: 62px solid  #005ce6;
+  transform: translateX(-50%);
+}
+.BsmallsadContainer {
+  position:fixed !important;
+  left: 30% !important;
+  right:70% !important; 
+  top:50% !important;
+  bottom:50% !important;
+}
+#Bsmallsadmode {
+  display: inline-block;
+  background:  #0047b3;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: relative;
+  left: 80%;
+  right: 20%;
+  color:#0F0;
+}
+#Bsmallsadmode::before {
+  content: "";
+  position: absolute;
+  top: -81%;
+  left: 50%;
+  border: 42px solid transparent;
+  border-bottom: 62px solid #0047b3;
+  transform: translateX(-50%);
+}
+
+.CsmallsadContainer {
+  position:fixed !important;
+  left: 20% !important;
+  right:80% !important; 
+  top:50% !important;
+  bottom:50% !important;
+}
+
+#Csmallsadmode {
+  display: inline-block;
+  background: #e6f0ff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: relative;
+  left: 80%;
+  right: 20%;
+  color:#0F0;
+}
+#Csmallsadmode::before {
+  content: "";
+  position: absolute;
+  top: -81%;
+  left: 50%;
+  border: 42px solid transparent;
+  border-bottom: 62px solid #e6f0ff;
+  transform: translateX(-50%);
+}
+
+
+#Dsmallsadmode {
+  display: inline-block;
+  background: #b3d1ff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: relative;
+  left: 80%;
+  right: 20%;
+  color:#0F0;
+}
+#Dsmallsadmode::before {
+  content: "";
+  position: absolute;
+  top: -81%;
+  left: 50%;
+  border: 42px solid transparent;
+  border-bottom: 62px solid #b3d1ff;
+  transform: translateX(-50%);
+}
+.EsmallsadContainer {
+  position:fixed !important;
+  left: 70% !important;
+  right:30% !important; 
+  top:50% !important;
+  bottom:50% !important;
+  
+
+}
+#Esmallsadmode {
+  display: inline-block;
+  background: #b3ffFF;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: relative;
+  left: 80%;
+  right: 20%;
+  color:#0F0;
+}
+#Esmallsadmode::before {
+  content: "";
+  position: absolute;
+  top: -81%;
+  left: 50%;
+  border: 42px solid transparent;
+  border-bottom: 62px solid #b3ffFF;
+  transform: translateX(-50%);
+}
+
+.FsmallsadContainer {
+  position:fixed !important;
+  left: 60% !important;
+  right:40% !important; 
+  top:50% !important;
+  bottom:50% !important;
+  
+}
+#Fsmallsadmode {
+  display: inline-block;
+  background:#4d94ff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: relative;
+  left: 80%;
+  right: 20%;
+  color:#0F0;
+}
+#Fsmallsadmode::before {
+  content: "";
+  position: absolute;
+  top: -81%;
+  left: 50%;
+  border: 42px solid transparent;
+  border-bottom: 62px solid #4d94fF;
+  transform: translateX(-50%);
+}
+
+.GsmallsadContainer {
+  position:fixed !important;
+  left: 50% !important;
+  right:50% !important; 
+  top:50% !important;
+  bottom:50% !important;
+} 
+
+#Gsmallsadmode {
+  display: inline-block;
+  background: #1a75ff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: relative;
+  left: 80%;
+  right: 20%;
+  color:#0F0;
+}
+#Gsmallsadmode::before {
+  content: "";
+  position: absolute;
+  top: -81%;
+  left: 50%;
+  border: 42px solid transparent;
+  border-bottom: 62px solid #1a75ff;
+  transform: translateX(-50%);
+}
+
+#wavy-line {
+  width: 150px;
+  height: 50px;
+  overflow: hidden;
+  margin: 0 auto 0 auto;
+  background-color: blue;
+}
+#wavy-line:before {
+  content: attr(data-text);
+  position: relative;
+  top: -35px;
+  color: rgba(0,0,0,0);
+  width: calc(100% + 27px);
+  font-size: 4em;
+  text-decoration-style: wavy;
+  text-decoration-color: #25173A;
+  text-decoration-line: underline;
+  animation: animate .9s linear infinite;
+  -webkit-animation: animate .9s linear infinite;
+}
+
+@keyframes animate {
+  0% { left: -0px; }
+  100% { left: -30px;}
+}
+@-webkit-keyframes animate {
+  0% { left: -0px; }
+  100% { left: -30px;}
+}

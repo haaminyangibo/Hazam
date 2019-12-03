@@ -8,9 +8,6 @@ import Three from './three-test'
 
 const ReactTone = (props) => {
 
-  
-
-
 const changeBackgroundColour = (colour) => {
   document.body.style.backgroundColor= colour
   let header = document.getElementById("header")
@@ -84,12 +81,12 @@ const pauseAudio = () => {
  
     const chunks = [];
   
-   const handlestartRecording = () => {
+    const handlestartRecording = () => {
 
-  output.connect(dest)
-  recorder.start()
+    output.connect(dest)
+    recorder.start()
 
-  recorder.ondataavailable = evt => chunks.push(evt.data);
+    recorder.ondataavailable = evt => chunks.push(evt.data);
  
   }
 
@@ -118,9 +115,6 @@ const pauseAudio = () => {
      
   }
 
-  // useEffect(() => {
-  //   console.log(hashData)
-  // },[hashData])
 ////////////////////////////////HANDLE KEYPRESS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     const keyQ = useKeyPress('q') 
     const keyW = useKeyPress('w') 
@@ -144,35 +138,37 @@ const pauseAudio = () => {
     const keyK = useKeyPress('k')
     const keyL = useKeyPress('l')
 
+    const keyZ = useKeyPress('z')
+    const keyX = useKeyPress('x')
+    const keyC = useKeyPress('c')
+    const keyV = useKeyPress('v')
+    const keyB = useKeyPress('b')
+    const keyN = useKeyPress('n')
+
+
+
+
 
     const keyP = useKeyPress('p')
     const key1 = useKeyPress('1')
 ////////////////////////////////TRIGGER SOUND\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     const triggerAttack = (sound) => {
-    polySynth.triggerAttackRelease(sound,0.2)
-
-    return  createImage(sound) 
-    }
+      polySynth.triggerAttackRelease(sound,0.2)
+      return  createImage(sound) 
+      }
 
     const triggerAttackTopRow = (sound) => {
-    toneSynth.triggerAttackRelease(sound, 0.5)
+      toneSynth.triggerAttackRelease(sound, 0.2)
+      return createSmallRainDrops(sound) 
 
+    }
+
+    const triggerAttackBottomRow =(sound) => {
+      synth.triggerAttackRelease(sound, 0.2)
+      return createWaves(sound)
     }
 ////////////////////////////////RENDER IMAGES\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-    // const handleRender3d = (cubeID, color) => {    
-    //     setTimeout(() => setRender3d(true), 100)   
-    //     setTimeout(() => remove3d(cubeID), 3000)
-    //      return  <Three cubeID = {cubeID} color ={color}/>
-         
-    // }
-
-    // const remove3d = (cubeID) => {
-    //  let cube = document.getElementById(`${cubeID}`)
-    //   setTimeout(() => cube.remove(), 2000) 
-    
-
-    // }
     const createImage =(sound) =>{   
       
       if (angryMode) {
@@ -219,10 +215,20 @@ const pauseAudio = () => {
   return <div className= "container"><div id= {actualsoundclass}  className ="animated bounce "></div></div>
     }
     }
- 
-///////////////////////
 
-//////////MODES\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+    const createSmallRainDrops = (sound) => {
+      let soundclass = sound.split("") 
+      let actualsoundclass = `${soundclass[0]}smallsadmode`
+      return  <div className= "container"><div className ={`${actualsoundclass[0]}smallsadContainer`}> <div id= {actualsoundclass}  className ="animated fadeInDownBig  "></div></div></div>
+    }
+
+
+    const createWaves = (sound)=> {
+
+      return <div className ="container"><div className="animated slideInRight" id= "wavy-line"  ></div> </div>
+    }
+ 
+/////////////////////////////////MODES\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 
 const handleMode = (event) =>{
@@ -280,7 +286,7 @@ const handleMode = (event) =>{
         let normalbutton = document.getElementById('normal')
          normalbutton.addEventListener('click', handleMode)
 
-     document.getElementById("outer").style.display ="block"
+       document.getElementById("outer").style.display ="block"
        
         
     
@@ -314,6 +320,26 @@ const handleMode = (event) =>{
           {keyH && triggerAttack("Bb3")}
           {keyJ && triggerAttack("C3") }
           {keyK && triggerAttack("D3") }
+        
+          {keyQ && triggerAttackTopRow("D4")}
+          {keyW && triggerAttackTopRow("E4")}
+          {keyE && triggerAttackTopRow("F4")}
+          {keyR && triggerAttackTopRow("G4")}
+          {keyT && triggerAttackTopRow("A4")}
+          {keyY && triggerAttackTopRow("Bb4")}
+          {keyU && triggerAttackTopRow("C4")}
+          {keyI && triggerAttackTopRow("D5")}
+          {keyO && triggerAttackTopRow("E5")}
+
+            {keyZ && triggerAttackBottomRow("D2")}
+            {keyX && triggerAttackBottomRow("E2")}
+           { keyC && triggerAttackBottomRow("F2")}
+            { keyV && triggerAttackBottomRow("G2")}
+             {keyB && triggerAttackBottomRow("Bb2")}
+            { keyN && triggerAttackBottomRow("A2")}
+
+
+
 
 
             </div>
