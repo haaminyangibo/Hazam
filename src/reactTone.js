@@ -4,6 +4,8 @@ import useKeyPress from './KeyPressHook'
 import {useState, useEffect} from 'react'
 import API from "./API"
 import Three from './three-test'
+import Popup from 'reactjs-popup'
+import SaveModal from './Components/SaveModal'
 
 
 const ReactTone = (props) => {
@@ -40,7 +42,7 @@ const pauseAudio = () => {
 }
 
 
-////////////////////////////////TONE JS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+////////////////////////////////STATES\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
     const [nightMode, setNightMode] = useState(false)
     const [sadMode, setSadMode] = useState(false)
@@ -48,8 +50,11 @@ const pauseAudio = () => {
     const [startRecording, setStartRecording]= useState(false)
     const [stopRecording, setStopRecording]= useState(false)
     const [hashData, setHashData] = useState("")
-    // const [render3d, setRender3d] = useState(false
+    const [handleOpen, setHandleOpen] = useState(false)
+    const [saveSongState, setSaveSongState]= useState(false)
+    const [file, setFile] = useState()
 
+////////////////////TONEJS||\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     const audio = document.querySelector('audio')
     const synth = new Tone.Synth()
     const toneSynth = new Tone.PluckSynth()
@@ -80,12 +85,18 @@ const pauseAudio = () => {
     synth.toMaster()
  
     const chunks = [];
+  ///////////////////////////RECORDING FUNCTIONS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
   
     const handlestartRecording = () => {
 
+     let recordButton = document.getElementById("record")
+
+     recordButton.innerText = "recording"
+     recordButton.style.backgroundColor ="red"
+      
     output.connect(dest)
     recorder.start()
-
     recorder.ondataavailable = evt => chunks.push(evt.data);
  
   }
@@ -94,14 +105,42 @@ const pauseAudio = () => {
       setStopRecording(true)
       setStartRecording(false)
 
-      recorder.stop();
-      recorder.onstop = evt => {
+      let recordButton = document.getElementById("record")
+      recordButton.innerText = "record your song"
+      recordButton.style.backgroundColor ="white"
+       
+
+
+        recorder.stop();
+        recorder.onstop = evt => {
         let blob = new Blob(chunks, { mimeType: 'audio/mp3' });
         audio.src = URL.createObjectURL(blob);
+        let file = new File ([blob], "bob.mp3", {type:"audio/mp3"});
+        setHandleOpen(true);
+      
+     
+  
+          setFile(file)
+          // saveSong( file)
+        // API.postPinata(file).then(pinatadata =>  {
+         
+        //   let data = {    
+        //     name:"test ",
+        //     song_hash: pinatadata.IpfsHash,
+        //     user_id: props.user_id
+        //   }
+        //   API.postSong(data)
+        // })   
 
-        let file = new File ([blob], "bob.mp3", {type:"audio/mp3"})
+      };
+     
+  }
 
-        API.postPinata(file).then(pinatadata =>  {
+  
+ const saveSong = () => {
+//  debugger
+ 
+  API.postPinata(file).then(pinatadata =>  {
          
           let data = {    
             name:"test ",
@@ -111,10 +150,11 @@ const pauseAudio = () => {
           API.postSong(data)
         })   
 
-      };
-     
-  }
+        console.log("Song")
 
+
+
+}
 ////////////////////////////////HANDLE KEYPRESS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     const keyQ = useKeyPress('q') 
     const keyW = useKeyPress('w') 
@@ -281,7 +321,7 @@ const handleMode = (event) =>{
         recordbutton.addEventListener('click', handlestartRecording )
 
         let stoprecordbutton = document.getElementById('stoprecording')
-        stoprecordbutton.addEventListener('click', handlestopRecording )
+        stoprecordbutton.addEventListener('click', handlestopRecording  )
 
         let normalbutton = document.getElementById('normal')
          normalbutton.addEventListener('click', handleMode)
@@ -333,9 +373,9 @@ const handleMode = (event) =>{
 
             {keyZ && triggerAttackBottomRow("D2")}
             {keyX && triggerAttackBottomRow("E2")}
-           { keyC && triggerAttackBottomRow("F2")}
+            { keyC && triggerAttackBottomRow("F2")}
             { keyV && triggerAttackBottomRow("G2")}
-             {keyB && triggerAttackBottomRow("Bb2")}
+            {keyB && triggerAttackBottomRow("Bb2")}
             { keyN && triggerAttackBottomRow("A2")}
 
 
@@ -387,11 +427,14 @@ const handleMode = (event) =>{
         return(
         <div>
       { whatModeToReturn()}
-      
+        <SaveModal  saveSong ={saveSong} file = {file}/>
+
         </div>
 
 
-  )}
+  )
+
+}
 
 export default ReactTone
 
