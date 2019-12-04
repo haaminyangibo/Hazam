@@ -54,12 +54,13 @@ signOut = () => {
   return ( 
     <div className= "app">
 
-      <HeaderMenu ></HeaderMenu>
+      
 
 
       <Router>
-
+      <HeaderMenu user = {this.state.user} signOut = {this.signOut}></HeaderMenu>
       <Switch>
+      
       <Route exact path="/" component={routerProps => <SignUpForm   {...routerProps}/>}/>
 
       <Route path="/synth" component ={routerProps => <ReactTone {...routerProps} sad ={sad} user_id ={this.state.user_id} /> }/>

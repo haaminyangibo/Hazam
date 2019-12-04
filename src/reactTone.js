@@ -43,6 +43,7 @@ const pauseAudio = () => {
 
 
 ////////////////////////////////STATES\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+const [happyMode, setHappyMode] = useState(false)
 
     const [nightMode, setNightMode] = useState(false)
     const [sadMode, setSadMode] = useState(false)
@@ -53,6 +54,8 @@ const pauseAudio = () => {
     const [handleOpen, setHandleOpen] = useState(false)
     const [saveSongState, setSaveSongState]= useState(false)
     const [file, setFile] = useState()
+    const [handlestopRecording2, setHandleStopRecording2]= useState(true)
+
 
 ////////////////////TONEJS||\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     const audio = document.querySelector('audio')
@@ -90,6 +93,7 @@ const pauseAudio = () => {
   
     const handlestartRecording = () => {
 
+    if (handlestopRecording2 === true){
      let recordButton = document.getElementById("record")
 
      recordButton.innerText = "recording"
@@ -98,51 +102,50 @@ const pauseAudio = () => {
     output.connect(dest)
     recorder.start()
     recorder.ondataavailable = evt => chunks.push(evt.data);
- 
-  }
+    setHandleStopRecording2(false)
+      }    
 
-  const handlestopRecording = () =>{ 
-      setStopRecording(true)
-      setStartRecording(false)
+      else if (handlestopRecording2 === false){
+        return(alert("you are already recording!"))
+      }
 
+      else {
+        return null
+      }
+     }
+
+    const handlestopRecording = () =>{ 
+
+      if (startRecording === true){
+     
       let recordButton = document.getElementById("record")
       recordButton.innerText = "record your song"
       recordButton.style.backgroundColor ="white"
        
+      document.getElementById("outer-2").style.display ="block"
+      setStopRecording(true)
+      setStartRecording(false)
 
-
-        recorder.stop();
+          recorder.stop();
+        
         recorder.onstop = evt => {
         let blob = new Blob(chunks, { mimeType: 'audio/mp3' });
         audio.src = URL.createObjectURL(blob);
         let file = new File ([blob], "bob.mp3", {type:"audio/mp3"});
-        setHandleOpen(true);
-      
      
-  
           setFile(file)
-          // saveSong( file)
-        // API.postPinata(file).then(pinatadata =>  {
-         
-        //   let data = {    
-        //     name:"test ",
-        //     song_hash: pinatadata.IpfsHash,
-        //     user_id: props.user_id
-        //   }
-        //   API.postSong(data)
-        // })   
-
-      };
      
+      };}
+
+      else {
+        return alert("you are not currently recording!"), props.history.push('/synth') 
+      }
   }
 
   
- const saveSong = () => {
-//  debugger
- 
-  API.postPinata(file).then(pinatadata =>  {
-         
-          let data = {    
+    const saveSong = () => {
+      API.postPinata(file).then(pinatadata =>  {   
+            let data = {    
             name:"test ",
             song_hash: pinatadata.IpfsHash,
             user_id: props.user_id
@@ -151,10 +154,9 @@ const pauseAudio = () => {
         })   
 
         console.log("Song")
-
-
-
 }
+
+
 ////////////////////////////////HANDLE KEYPRESS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     const keyQ = useKeyPress('q') 
     const keyW = useKeyPress('w') 
@@ -213,33 +215,11 @@ const pauseAudio = () => {
       
       if (angryMode) {
       
+        
         let soundclass = sound.split("") 
         let actualsoundclass = `${soundclass[0]}angrymode`
 
-         if (actualsoundclass === "Aangrymode"){
-            return <div className= "container"><div id= {actualsoundclass}  className ="animated zoomInLeft slow"></div></div>
-            }
-          else if (actualsoundclass  ==="Bangrymode"){
-            return <div className= "container"><div id= {actualsoundclass}  className ="animated fadeOutLeftBig slower "></div></div>
-             }
-          else if (actualsoundclass  ==="Cangrymode"){
-             return <div className= "container"><div id= {actualsoundclass}  className ="animated fadeOutUp slower"></div></div>
-               }
-          else if (actualsoundclass  ==="Dangrymode"){
-                return <div className= "container"><div id= {actualsoundclass}  className ="animated fadeOutUp slower"></div></div>
-              }
-          else if (actualsoundclass  ==="Eangrymode"){
-                    return <div className= "container"><div id= {actualsoundclass}  className ="animated fadeOutUp slower"></div></div>
-              }
-          else if (actualsoundclass  ==="Fangrymode"){
-                return <div className= "container"><div id= {actualsoundclass}  className ="animated fadeOutUp slower"></div></div>
-                  }
-          else if (actualsoundclass  === "Gangrymode"){
-                    return <div className= "container"><div id= {actualsoundclass}  className ="animated wobble slower"></div></div>
-                      }
-          else {  
-              return <div className= "container"><div id= {actualsoundclass}  className ="animated fadeOutUP slower"></div></div> 
-          }
+      return <div className= "container"><div id= {actualsoundclass}  className ="animated fadeOutUp slower"></div></div>
     
     } else if (sadMode) {
       let soundclass = sound.split("") 
@@ -248,12 +228,19 @@ const pauseAudio = () => {
 
     }
           
-      else {
+      else if (happyMode) {
         let soundclass = sound.split("") 
-        let actualsoundclass = `${soundclass[0]}class`
+        let actualsoundclass = `${soundclass[0]}class2`
     
   return <div className= "container"><div id= {actualsoundclass}  className ="animated bounce "></div></div>
     }
+
+    else  {
+      let soundclass = sound.split("") 
+      let actualsoundclass = `${soundclass[0]}class`
+  
+return <div className= "container"><div id= {actualsoundclass}  className ="animated bounce "></div></div>
+  }
     }
 
     const createSmallRainDrops = (sound) => {
@@ -261,7 +248,6 @@ const pauseAudio = () => {
       let actualsoundclass = `${soundclass[0]}smallsadmode`
       return  <div className= "container"><div className ={`${actualsoundclass[0]}smallsadContainer`}> <div id= {actualsoundclass}  className ="animated fadeInDownBig  "></div></div></div>
     }
-
 
     const createWaves = (sound)=> {
 
@@ -277,6 +263,8 @@ const handleMode = (event) =>{
          setNightMode(true)
          setSadMode(false)
          setAngryMode(false)
+         setHappyMode(false)
+
          changeNightModeColour("black")
        
          
@@ -285,6 +273,8 @@ const handleMode = (event) =>{
          setNightMode(false);
          setSadMode(true);
          setAngryMode(false);
+         setHappyMode(false);
+
          changeBackgroundColour("rgb(153, 204, 255)");
 
         }
@@ -292,16 +282,30 @@ const handleMode = (event) =>{
          setNightMode(false);
          setSadMode(false);
          setAngryMode(true);
+         setHappyMode(false);
+
          changeBackgroundColour("rgb(255, 163, 102)");
 
         }
-        else if (event.target.id === "normal"){
+        else if (event.target.id === "happyMode"){
           setNightMode(false);
           setSadMode(false);
           setAngryMode(false);
+          setHappyMode(true)
+
+          changeBackgroundColour("lightpink")
+        }
+
+        else if (event.target.id === "normal"){
+
+          setNightMode(false);
+          setSadMode(false);
+          setAngryMode(false);
+          setHappyMode(false)
 
           changeBackgroundColour("white")
-        };
+
+        }
 };
 
    
@@ -310,30 +314,49 @@ const handleMode = (event) =>{
     useEffect(() => {
         let nightmodebutton = document.getElementById("nightMode")
         nightmodebutton.addEventListener('click', handleMode);  
-        
+        nightmodebutton.className= "ui button"
+
         let sadmodebutton = document.getElementById("sadMode")
         sadmodebutton.addEventListener('click', handleMode);  
+        sadmodebutton.className= "ui button"
+
+        
 
         let angrymodebutton = document.getElementById("angryMode")
         angrymodebutton.addEventListener('click', handleMode);  
+        angrymodebutton.className= "ui button"
+
 
         let recordbutton = document.getElementById('record')
         recordbutton.addEventListener('click', handlestartRecording )
+        recordbutton.className= "ui button"
+
 
         let stoprecordbutton = document.getElementById('stoprecording')
         stoprecordbutton.addEventListener('click', handlestopRecording  )
+       stoprecordbutton.className= "ui button"
 
-        let normalbutton = document.getElementById('normal')
-         normalbutton.addEventListener('click', handleMode)
+       let inner = document.getElementById('inner')
+       inner.append(stoprecordbutton)
+
+        let happybutton = document.getElementById('happyMode')
+         happybutton.addEventListener('click', handleMode)
+         happybutton.className= "ui button"
 
        document.getElementById("outer").style.display ="block"
-       
-        
     
+
+       let normalbutton = document.getElementById('normal')
+       normalbutton.addEventListener('click', handleMode)
+       normalbutton.className= "ui button"
+       
+       
         return () => {
           nightmodebutton.removeEventListener('click',handleMode);
         };
       }, []);
+
+
 
      const whatModeToReturn = () =>{
         if (nightMode){
@@ -371,16 +394,12 @@ const handleMode = (event) =>{
           {keyI && triggerAttackTopRow("D5")}
           {keyO && triggerAttackTopRow("E5")}
 
-            {keyZ && triggerAttackBottomRow("D2")}
-            {keyX && triggerAttackBottomRow("E2")}
-            { keyC && triggerAttackBottomRow("F2")}
-            { keyV && triggerAttackBottomRow("G2")}
-            {keyB && triggerAttackBottomRow("Bb2")}
-            { keyN && triggerAttackBottomRow("A2")}
-
-
-
-
+          {keyZ && triggerAttackBottomRow("D2")}
+          {keyX && triggerAttackBottomRow("E2")}
+          {keyC && triggerAttackBottomRow("F2")}
+          {keyV && triggerAttackBottomRow("G2")}
+          {keyB && triggerAttackBottomRow("Bb2")}
+          {keyN && triggerAttackBottomRow("A2")}
 
             </div>
         }
@@ -394,10 +413,21 @@ const handleMode = (event) =>{
             {keyH && triggerAttack("F3") }
             {keyJ && triggerAttack("G#3")}
             {keyK && triggerAttack("A4") }
-
-
               </div>
           }
+          else  if (happyMode){
+            return <div>         
+            {keyA && triggerAttack("A3") }
+            {keyS && triggerAttack("B3") }
+            {keyD && triggerAttack("C3") }
+            {keyF && triggerAttack("D3") }
+            {keyG && triggerAttack("E3") }
+            {keyH && triggerAttack("F3") }
+            {keyJ && triggerAttack("G#3")}
+            {keyK && triggerAttack("A4") }
+              </div>
+          }
+
 
         else {
             return <div>
@@ -415,9 +445,6 @@ const handleMode = (event) =>{
             {key1 && playAudio()}
             {keyP && pauseAudio()}
 
-         
-
-
             </div>
         } ;
       }
@@ -426,13 +453,10 @@ const handleMode = (event) =>{
     
         return(
         <div>
-      { whatModeToReturn()}
-        <SaveModal  saveSong ={saveSong} file = {file}/>
-
+           { whatModeToReturn()}
+          <SaveModal  saveSong ={saveSong} file = {file} stopRecording ={stopRecording}/>  
         </div>
-
-
-  )
+    )
 
 }
 

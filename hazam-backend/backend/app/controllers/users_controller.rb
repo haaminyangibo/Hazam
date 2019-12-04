@@ -17,7 +17,8 @@ class UsersController < ApplicationController
     end
 
     def show 
-        user = User.find_by(params[:id])
+# byebug
+        user = User.find(params[:id])
         render json: {user: user, songs: user.songs}
     end 
 

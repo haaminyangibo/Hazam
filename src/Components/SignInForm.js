@@ -27,10 +27,10 @@ class SignInForm extends React.Component {
         event.target.reset();
         API.signIn(this.state.email, this.state.password)
             .then(data => {
-                if (data.error) throw Error(data.error)
+                if (data.error) throw Error(data.error), alert(data.error)
                 this.props.signIn(data)
                  this.props.history.push('/synth') 
-            }).then(data=> console.log(data))
+            }).then(data=> alert(data))
             .catch(error => console.log(error))
             
     }
