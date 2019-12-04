@@ -1,13 +1,14 @@
 import React from 'react'
 import * as THREE from "three";
+import { MaterialLoader } from 'three';
 
 
 export default class Three extends React.Component {
 
    
     componentDidMount() {
-        var scene = new THREE.Scene();
-        var camera = new THREE.PerspectiveCamera( 75, 100/100, 0.1, 1000 );
+        const scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera( 75, 50/50, 0.1, 1000 );
         var renderer = new THREE.WebGLRenderer({ alpha: true });
         renderer.setSize( 200,200 );
         renderer.setClearColor( 0x000000, 0 );
@@ -25,12 +26,19 @@ export default class Three extends React.Component {
           cube.rotation.y += 0.01;
           renderer.render( scene, camera );
         };   
-         animate()   
+         animate(); 
+  
+         setTimeout(() => scene.remove.apply(scene, scene.children), 2500)
+      
         console.log("hello ")
     }
     render() {
         return (
-          <div />
+          
+              <div/>
+          // <button onclick = {scene.remove.apply(scene, scene.children)}></button>
+
+          
         )
       }
 

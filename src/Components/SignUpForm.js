@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Checkbox, Form } from 'semantic-ui-react'
 import API from '../API'
+import {Link} from 'react-router-dom'
 
 
 class SignUpForm extends React.Component {
@@ -51,6 +52,8 @@ class SignUpForm extends React.Component {
     </Form.Field>
     <Button type='submit'>Submit</Button>
   </Form>
+
+  <Link to ="/signin"> Already have an account? </Link>
   </div>
  
 

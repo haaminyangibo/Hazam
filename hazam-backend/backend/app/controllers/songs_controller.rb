@@ -18,7 +18,7 @@ class SongsController < ApplicationController
 
 
     def show 
-        song = Song.find_by(params[:id])
+        song = Song.find_by(params[:id] === user_id)
         render json: {song: song}
     end
 

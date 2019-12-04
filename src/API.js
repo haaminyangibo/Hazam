@@ -101,7 +101,7 @@ const getSongs = (data) =>{
 // debugger
 let configObject = generateConfigObject("GET",data);
 return fetch(SIGN_UP_URL+data)
-debugger
+
 }
 
 
