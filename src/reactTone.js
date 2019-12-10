@@ -4,13 +4,13 @@ import useKeyPress from './KeyPressHook'
 import {useState, useEffect} from 'react'
 import API from "./API"
 import Three from './three-test'
-import Popup from 'reactjs-popup'
 import SaveModal from './Components/SaveModal'
 
 
 const ReactTone = (props) => {
 
 const changeBackgroundColour = (colour) => {
+  // document.getElementById("audio").style.display= "none"
   document.body.style.backgroundColor= colour
   let header = document.getElementById("header")
   header.style.backgroundColor = colour
@@ -93,7 +93,6 @@ const [happyMode, setHappyMode] = useState(false)
   
     const handlestartRecording = () => {
 
-    if (handlestopRecording2 === true){
      let recordButton = document.getElementById("record")
 
      recordButton.innerText = "recording"
@@ -101,61 +100,51 @@ const [happyMode, setHappyMode] = useState(false)
       
     output.connect(dest)
     recorder.start()
-    recorder.ondataavailable = evt => chunks.push(evt.data);
-    setHandleStopRecording2(false)
-      }    
+    recorder.ondataavailable = evt => chunks.push(evt.data)  
 
-      else if (handlestopRecording2 === false){
-        return(alert("you are already recording!"))
-      }
-
-      else {
-        return null
-      }
      }
 
     const handlestopRecording = () =>{ 
 
-      if (startRecording === true){
      
       let recordButton = document.getElementById("record")
-      recordButton.innerText = "record your song"
-      recordButton.style.backgroundColor ="white"
+      recordButton.innerText = "record"
+      recordButton.style.backgroundColor = "lightgrey"
        
       document.getElementById("outer-2").style.display ="block"
       setStopRecording(true)
       setStartRecording(false)
-
+      setHandleOpen(true)
           recorder.stop();
         
         recorder.onstop = evt => {
         let blob = new Blob(chunks, { mimeType: 'audio/mp3' });
         audio.src = URL.createObjectURL(blob);
         let file = new File ([blob], "bob.mp3", {type:"audio/mp3"});
+       
      
-          setFile(file)
-     
-      };}
-
-      else {
-        return alert("you are not currently recording!"), props.history.push('/synth') 
-      }
+          // setFile(file) 
+          saveSong(file)
+      };
+      
   }
 
   
-    const saveSong = () => {
+    const saveSong = (file) => {
+      // debugger
       API.postPinata(file).then(pinatadata =>  {   
             let data = {    
             name:"test ",
             song_hash: pinatadata.IpfsHash,
             user_id: props.user_id
           }
-          API.postSong(data)
-        })   
-
-        console.log("Song")
+          API.postSong(data).then()
+        }) .then(data => alert("your song was saved!"))  
+        // console.log(file)
+        
 }
 
+ let closeModal = ()  => { props.history.push('/signup'); }
 
 ////////////////////////////////HANDLE KEYPRESS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     const keyQ = useKeyPress('q') 
@@ -167,9 +156,7 @@ const [happyMode, setHappyMode] = useState(false)
     const keyU = useKeyPress('u') 
     const keyI = useKeyPress('i') 
     const keyO = useKeyPress('o') 
-
-   
-
+ 
     const keyA = useKeyPress('a') 
     const keyS = useKeyPress('s')
     const keyD = useKeyPress('d')
@@ -188,20 +175,32 @@ const [happyMode, setHappyMode] = useState(false)
     const keyN = useKeyPress('n')
 
 
-
-
-
     const keyP = useKeyPress('p')
     const key1 = useKeyPress('1')
 ////////////////////////////////TRIGGER SOUND\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     const triggerAttack = (sound) => {
-      polySynth.triggerAttackRelease(sound,0.2)
+      synth.triggerAttackRelease(sound,0.2)
       return  createImage(sound) 
       }
 
+      const triggerAttackNormal = (sound) => {
+        toneSynth.triggerAttackRelease(sound,0.2)
+        return  createImage(sound) 
+        }
+      const triggerAttackSad = (sound) => {
+        duoSynth.triggerAttackRelease(sound,0.2)
+        return  createImage(sound) 
+        }
+
     const triggerAttackTopRow = (sound) => {
-      toneSynth.triggerAttackRelease(sound, 0.2)
+      duoSynth.triggerAttackRelease(sound, 0.2)
       return createSmallRainDrops(sound) 
+
+    }
+
+    const triggerAttackTopRowHappy = (sound) => {
+      synth.triggerAttackRelease(sound, 0.2)
+      return createImageSmall(sound) 
 
     }
 
@@ -209,6 +208,24 @@ const [happyMode, setHappyMode] = useState(false)
       synth.triggerAttackRelease(sound, 0.2)
       return createWaves(sound)
     }
+
+    const triggerAttackTopRowMetal = (sound) => {
+      membraneSynth.triggerAttackRelease(sound, 0.2)
+      return createSmallAngryLines(sound) 
+
+    }
+
+    const triggerAttackMetal = (sound) => {
+      membraneSynth.triggerAttackRelease(sound,0.2)
+      return  createImage(sound) 
+      }
+
+
+    const triggerAttackBottomRowMetal =(sound) => {
+      membraneSynth.triggerAttackRelease(sound, 0.2)
+      return createImage(sound)
+    }
+
 ////////////////////////////////RENDER IMAGES\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
     const createImage =(sound) =>{   
@@ -243,6 +260,15 @@ return <div className= "container"><div id= {actualsoundclass}  className ="anim
   }
     }
 
+    const  createSmallAngryLines = (sound)=> {
+      let soundclass = sound.split("") 
+      let actualsoundclass = `${soundclass[0]}smallangrymode`
+
+    return <div className= "container"><div id= {actualsoundclass}  className ="animated fadeOutUp slower"></div></div>
+  
+
+    }
+
     const createSmallRainDrops = (sound) => {
       let soundclass = sound.split("") 
       let actualsoundclass = `${soundclass[0]}smallsadmode`
@@ -254,6 +280,14 @@ return <div className= "container"><div id= {actualsoundclass}  className ="anim
       return <div className ="container"><div className="animated slideInRight" id= "wavy-line"  ></div> </div>
     }
  
+    const createImageSmall =(sound) => {
+
+      let soundclass = sound.split("") 
+        let actualsoundclass = `${soundclass[0]}class2small`
+    
+  return <div className= "container"><div id= {actualsoundclass}  className ="animated bounce "></div></div>
+    
+    }
 /////////////////////////////////MODES\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 
@@ -306,11 +340,9 @@ const handleMode = (event) =>{
           changeBackgroundColour("white")
 
         }
-};
+  };
 
    
-
-
     useEffect(() => {
         let nightmodebutton = document.getElementById("nightMode")
         nightmodebutton.addEventListener('click', handleMode);  
@@ -334,7 +366,7 @@ const handleMode = (event) =>{
 
         let stoprecordbutton = document.getElementById('stoprecording')
         stoprecordbutton.addEventListener('click', handlestopRecording  )
-       stoprecordbutton.className= "ui button"
+         stoprecordbutton.className= "ui button"
 
        let inner = document.getElementById('inner')
        inner.append(stoprecordbutton)
@@ -375,14 +407,14 @@ const handleMode = (event) =>{
             }
         else  if (sadMode){
           return <div>         
-          {keyA && triggerAttack("D3") }
-          {keyS && triggerAttack("E3") }
-          {keyD && triggerAttack("F3") }
-          {keyF && triggerAttack("G3") }
-          {keyG && triggerAttack("A3") }
-          {keyH && triggerAttack("Bb3")}
-          {keyJ && triggerAttack("C3") }
-          {keyK && triggerAttack("D3") }
+          {keyA && triggerAttackSad("D3") }
+          {keyS && triggerAttackSad("E3") }
+          {keyD && triggerAttackSad("F3") }
+          {keyF && triggerAttackSad("G3") }
+          {keyG && triggerAttackSad("A3") }
+          {keyH && triggerAttackSad("Bb3")}
+          {keyJ && triggerAttackSad("C3") }
+          {keyK && triggerAttackSad("D3") }
         
           {keyQ && triggerAttackTopRow("D4")}
           {keyW && triggerAttackTopRow("E4")}
@@ -393,26 +425,43 @@ const handleMode = (event) =>{
           {keyU && triggerAttackTopRow("C4")}
           {keyI && triggerAttackTopRow("D5")}
           {keyO && triggerAttackTopRow("E5")}
-
+{/* 
           {keyZ && triggerAttackBottomRow("D2")}
           {keyX && triggerAttackBottomRow("E2")}
           {keyC && triggerAttackBottomRow("F2")}
           {keyV && triggerAttackBottomRow("G2")}
           {keyB && triggerAttackBottomRow("Bb2")}
-          {keyN && triggerAttackBottomRow("A2")}
+          {keyN && triggerAttackBottomRow("A2")} */}
 
             </div>
         }
         else  if (angryMode){
             return <div>         
-            {keyA && triggerAttack("A3") }
-            {keyS && triggerAttack("B3") }
-            {keyD && triggerAttack("C3") }
-            {keyF && triggerAttack("D3") }
-            {keyG && triggerAttack("E3") }
-            {keyH && triggerAttack("F3") }
-            {keyJ && triggerAttack("G#3")}
-            {keyK && triggerAttack("A4") }
+            {keyA && triggerAttackMetal("A3") }
+            {keyS && triggerAttackMetal("B3") }
+            {keyD && triggerAttackMetal("C3") }
+            {keyF && triggerAttackMetal("D3") }
+            {keyG && triggerAttackMetal("E3") }
+            {keyH && triggerAttackMetal("F3") }
+            {keyJ && triggerAttackMetal("G#3")}
+            {keyK && triggerAttackMetal("A4") }
+
+          {keyQ && triggerAttackTopRowMetal("A4")}
+          {keyW && triggerAttackTopRowMetal("B4")}
+          {keyE && triggerAttackTopRowMetal("C4")}
+          {keyR && triggerAttackTopRowMetal("D4")}
+          {keyT && triggerAttackTopRowMetal("F4")}
+          {keyY && triggerAttackTopRowMetal("Bb4")}
+          {keyU && triggerAttackTopRowMetal("C4")}
+          {keyI && triggerAttackTopRowMetal("D4")}
+          {keyO && triggerAttackTopRowMetal("E4")}
+
+          {/* {keyZ && triggerAttackBottomRowMetal("D2")}
+          {keyX && triggerAttackBottomRowMetal("E2")}
+          {keyC && triggerAttackBottomRowMetal("F2")}
+          {keyV && triggerAttackBottomRowMetal("G2")}
+          {keyB && triggerAttackBottomRowMetal("Bb2")}
+          {keyN && triggerAttackBottomRowMetal("A2")} */}
               </div>
           }
           else  if (happyMode){
@@ -423,38 +472,48 @@ const handleMode = (event) =>{
             {keyF && triggerAttack("D3") }
             {keyG && triggerAttack("E3") }
             {keyH && triggerAttack("F3") }
-            {keyJ && triggerAttack("G#3")}
+            {keyJ && triggerAttack("G3")}
             {keyK && triggerAttack("A4") }
+
+            {keyQ && triggerAttackTopRowHappy("A4")}
+          {keyW && triggerAttackTopRowHappy("B4")}
+          {keyE && triggerAttackTopRowHappy("C4")}
+          {keyR && triggerAttackTopRowHappy("D4")}
+          {keyT && triggerAttackTopRowHappy("E4")}
+          {keyY && triggerAttackTopRowHappy("Fb4")}
+          {keyU && triggerAttackTopRowHappy("G#4")}
+          {keyI && triggerAttackTopRowHappy("A5")}
+          {keyO && triggerAttackTopRowHappy("B5")}
+
+          
               </div>
           }
 
 
         else {
             return <div>
-            {keyA && triggerAttack("A3") }
-            {keyS && triggerAttack("D4") }
-            {keyD && triggerAttack("E4") }
-            {keyF && triggerAttack("F4") }
-            {keyG && triggerAttack("G4") }
-            {keyH && triggerAttack("A4") }
-            {keyJ && triggerAttack("B4") }
-            {keyK && triggerAttack("C5") }
-            {keyQ && triggerAttackTopRow("C5") }
+            {keyA && triggerAttackNormal("A3") }
+            {keyS && triggerAttackNormal("B3") }
+            {keyD && triggerAttackNormal("C3") }
+            {keyF && triggerAttackNormal("D3") }
+            {keyG && triggerAttackNormal("E3") }
+            {keyH && triggerAttackNormal("F3") }
+            {keyJ && triggerAttackNormal("G3") }
+            {keyK && triggerAttackNormal("A3") }
+            
 
-
+            {/* 
             {key1 && playAudio()}
-            {keyP && pauseAudio()}
+            {keyP && pauseAudio()} */}
 
             </div>
         } ;
       }
-  
-
     
         return(
         <div>
            { whatModeToReturn()}
-          <SaveModal  saveSong ={saveSong} file = {file} stopRecording ={stopRecording}/>  
+           {/* <SaveModal saveSong ={saveSong} file = {file} handleOpen= {handleOpen} setHandleOpen ={setHandleOpen  }/>   */}
         </div>
     )
 

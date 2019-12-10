@@ -15,7 +15,7 @@ export default function UseKeyPress(targetKey) {
     
     if (key === targetKey) {
       // setKeyPressed(true) 
-      setTimeout(() => setKeyPressed(false), 1000)
+      setTimeout(() => setKeyPressed(false), 800)
     }
   };
 

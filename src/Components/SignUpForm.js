@@ -29,14 +29,23 @@ class SignUpForm extends React.Component {
             [event.target.name]: event.target.value
         })
     }
+
+    componentDidMount(){
+
+      
+    }
     render (){
+      {this.props.user_id > 0 && this.props.history.push('/synth')}
+      {document.getElementById("outer").style.display = "none"}
+      {document.getElementById("outer-2").style.display = "none"}
 
      return (
+      
        <div className= "form-container">
          <h2>Welcome to Hazam, the online synthesiser</h2>
         <Form onSubmit ={this.handleSubmit}>
         <Form.Field>
-      <label>Name</label>
+       <label>Name</label>
       <input placeholder='Name' name = "name" value ={this.state.name}  onChange ={this.handleChange}/>
     </Form.Field>
     <Form.Field>

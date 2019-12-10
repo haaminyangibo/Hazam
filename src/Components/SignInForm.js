@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button,Form } from 'semantic-ui-react'
 import API from '../API';
+import {Link} from 'react-router-dom'
 
 class SignInForm extends React.Component {
 
@@ -13,6 +14,8 @@ class SignInForm extends React.Component {
         if (this.props.user) {
             this.props.history.push('/synth')
         }
+
+        document.getElementById("outer").style.display ="none"
     }
 
 
@@ -27,18 +30,18 @@ class SignInForm extends React.Component {
         event.target.reset();
         API.signIn(this.state.email, this.state.password)
             .then(data => {
-                if (data.error) throw Error(data.error), alert(data.error)
+                if (data.error) throw Error(data.error)
                 this.props.signIn(data)
                  this.props.history.push('/synth') 
-            }).then(data=> alert(data))
+            }).then()
             .catch(error => console.log(error))
             
     }
 
     render(){
+
         return(
-        <div className="form-container" >
-            
+        <div className="form-container" >           
             <Form onSubmit={this.handleSubmit}>
                         <h1>Login</h1>
                 <Form.Field>
@@ -49,14 +52,14 @@ class SignInForm extends React.Component {
                     <input placeholder='Password' name="password" type="password" value={this.state.password} onChange={this.handleChange}/>
                 </Form.Field>
                 
-                <Button type='submit'>Log In</Button>
+                <Button type='submit'>Log In</Button><br></br>
+                <Link to="/signup">Don't have an account? Sign up here!</Link>
             </Form>
             
             </div>
 
         )
     }
-
 }
 
 export default SignInForm 

@@ -8,9 +8,7 @@ class YourSongs extends React.Component {
 
         this.setState({
             user_id : this.props.user_id
-        }) 
-     
-
+        })   
     }
 
     state = {
@@ -22,23 +20,22 @@ class YourSongs extends React.Component {
      this.state.user_id && API.getSongs(this.state.user_id).then(resp => resp.json()).then(songdata=>  this.setState ({ songs: songdata.songs }) )         
     }
 
-
     render () {
-        
-     
-        this.getSongs()
+           
+       {this.getSongs() }
+
         let controls = document.getElementById("outer")
         controls.style.display = "none"
             
         return(
-          
-            <div > 
-            {this.state.songs.length > 0 && <SongList songs = {this.state.songs}/>}
-            </div>
+            <>        
+              <h1>Here are your great songs! </h1>
+            
+            {this.state.songs.length > 0 && <SongList songs = {this.state.songs}/>}                
+            </>
 
         )
     }
-
 }
 
 export default YourSongs
