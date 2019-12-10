@@ -5,9 +5,9 @@ import API from '../API'
 
 
 const ModalBasicExample = (props) => (
- 
-  <Modal trigger={<button id= "stoprecording">stop recording</button>} basic size='small'>
-  
+
+  <Modal id="modal" trigger={<Button id= "stoprecording">stop recording</Button>} basic size='small'>
+    {/* actions={['Snooze', { key: 'done', content: 'Done', positive: true }]} */}
     <Header icon='archive' content='Want to save it? :)' />
     <Modal.Content>
       <p>
@@ -15,17 +15,14 @@ const ModalBasicExample = (props) => (
       </p>
     </Modal.Content>
     <Modal.Actions>
-      <Button id ="savesongbutton" basic color='red' inverted>
+      <Button onClick= { () => props.closeModal() } basic color='red' inverted>
         <Icon name='remove' /> No
       </Button>
-      <Button color='green' inverted onClick= {() => props.saveSong()}>
+      <Button color='green' inverted onClick= {() => props.saveSong()  }>
         <Icon name='checkmark' /> Yes
       </Button>
     </Modal.Actions>
-  </Modal>
-
-  
-
+  </Modal> 
 )
 
 export default ModalBasicExample

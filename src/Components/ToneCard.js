@@ -12,11 +12,8 @@ class ToneCard extends React.Component{
                   <Card onClick={this.props.onClick}fluid className= "column" data-note={datanote}>
                     <Card.Content>
                         <Card.Header>{letter}</Card.Header>
-                    </Card.Content>
-                 
+                    </Card.Content>             
                   </Card>
-                
-                
                 </div>
             
         )

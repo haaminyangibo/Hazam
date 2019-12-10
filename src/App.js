@@ -61,15 +61,16 @@ signOut = () => {
       <HeaderMenu user = {this.state.user} signOut = {this.signOut}></HeaderMenu>
       <Switch>
       
-      <Route exact path="/" component={routerProps => <SignUpForm   {...routerProps}/>}/>
-
+      <Route exact path="/" component={routerProps => <SignUpForm {...routerProps}/>}/>
       <Route path="/synth" component ={routerProps => <ReactTone {...routerProps} sad ={sad} user_id ={this.state.user_id} /> }/>
-      <Route path="/signup" component={routerProps => <SignUpForm {...routerProps} />}/>
+      <Route path="/signup" component={routerProps => <SignUpForm {...routerProps} user_id = {this.state.user_id}/>}/>
       <Route path = "/signin" component={routerProps => <SignInForm {...routerProps} signIn = {this.signIn}/>}/>
       <Route path = "/yoursongs" component={routerProps => <YourSongs {...routerProps} user_id = {this.state.user_id} />}/>
 
       </Switch>
-
+      <div className ="footercontainer">
+      <div className="footer">Made by Haami Nyangibo 2019 © </div>
+      </div >
       </Router>
 
 
